@@ -1,0 +1,3 @@
+change
+
+MVC -> Model(DB) View(HTML[smarty]) Control(PHP Code)
