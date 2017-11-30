@@ -1,0 +1,14 @@
+tablas
+
+perfil
+-idperfil auto PK
+-perfil
+
+
+Usuarios
+-idusuario auto
+-user
+-pass
+-nombre
+-idperfil FK
+-estado text(1)
