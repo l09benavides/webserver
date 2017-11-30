@@ -6,9 +6,38 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script>
 
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
 $(document).ready(function(){
-  $('#menu').hide();
-  $('#content').hide();
+    if(getCookie("loggedin") === 'false'){
+        $('#logindiv').show();
+        $('#menu').hide();
+        $('#content').hide();
+    }if(getCookie("loggedin")  === 'true'){
+        $('#logindiv').hide();
+        $('#menu').show();
+        $('#content').show();
+    } else{
+        $('#logindiv').show();
+        $('#menu').hide();
+        $('#content').hide();
+    }
+
+
 
 
 $("#login").click(function(){
@@ -20,16 +49,17 @@ $("#login").click(function(){
       data: data
     })
     .done(function(respuesta){
-      console.log("Success");
-        $('#logindiv').hide();
-        $('#menu').show();
-        $('#content').show();
+        document.cookie = "loggedin=true;";
+      console.log("Success" + JSON.parse(respuesta).toString());
         $('#content').html("<h1>Bienvenido {$kNombre}<h1>");
+
     })
     .fail(function(respuesta){
-      console.log("Error");
+        var res = respuesta;
+      console.dir(res);
         $('#content').show();
         $('#content').html("<h1>Usuario o Password Incorrecto<h1>");
+        document.cookie = "loggedin=false;";
     })
     .always(function(respuesta){
       console.log("Complete");
@@ -40,9 +70,8 @@ $("#login").click(function(){
   
   //Logout
   $("#l-o").click(function(){
-      $('#menu').hide();
-      $('#content').hide();
-      $('#logindiv').show();
+      document.cookie = "loggedin=false;";
+      location.reload();
 	});
 });
 

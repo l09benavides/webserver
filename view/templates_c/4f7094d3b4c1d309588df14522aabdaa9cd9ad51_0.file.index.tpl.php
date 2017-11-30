@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.31, created on 2017-11-30 18:26:07
+/* Smarty version 3.1.31, created on 2017-11-30 20:46:50
   from "/srv/http/distribuidora/webserver/view/templates/index.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.31',
-  'unifunc' => 'content_5a204d3f08f6a7_83484979',
+  'unifunc' => 'content_5a206e3a55deb4_57245190',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '4f7094d3b4c1d309588df14522aabdaa9cd9ad51' => 
     array (
       0 => '/srv/http/distribuidora/webserver/view/templates/index.tpl',
-      1 => 1512009082,
+      1 => 1512074798,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5a204d3f08f6a7_83484979 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5a206e3a55deb4_57245190 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 <html>
 <head>
@@ -35,9 +35,38 @@ function content_5a204d3f08f6a7_83484979 (Smarty_Internal_Template $_smarty_tpl)
 <?php echo '<script'; ?>
 >
 
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
 $(document).ready(function(){
-  $('#menu').hide();
-  $('#content').hide();
+    if(getCookie("loggedin") === 'false'){
+        $('#logindiv').show();
+        $('#menu').hide();
+        $('#content').hide();
+    }if(getCookie("loggedin")  === 'true'){
+        $('#logindiv').hide();
+        $('#menu').show();
+        $('#content').show();
+    } else{
+        $('#logindiv').show();
+        $('#menu').hide();
+        $('#content').hide();
+    }
+
+
 
 
 $("#login").click(function(){
@@ -49,17 +78,18 @@ $("#login").click(function(){
       data: data
     })
     .done(function(respuesta){
-      console.log("Success");
-        $('#logindiv').hide();
-        $('#menu').show();
-        $('#content').show();
+        document.cookie = "loggedin=true;";
+      console.log("Success" + JSON.parse(respuesta).toString());
         $('#content').html("<h1>Bienvenido <?php echo $_smarty_tpl->tpl_vars['kNombre']->value;?>
 <h1>");
+
     })
     .fail(function(respuesta){
-      console.log("Error");
+        var res = respuesta;
+      console.dir(res);
         $('#content').show();
         $('#content').html("<h1>Usuario o Password Incorrecto<h1>");
+        document.cookie = "loggedin=false;";
     })
     .always(function(respuesta){
       console.log("Complete");
@@ -70,9 +100,8 @@ $("#login").click(function(){
   
   //Logout
   $("#l-o").click(function(){
-      $('#menu').hide();
-      $('#content').hide();
-      $('#logindiv').show();
+      document.cookie = "loggedin=false;";
+      location.reload();
 	});
 });
 

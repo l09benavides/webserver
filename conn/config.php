@@ -1,8 +1,8 @@
 <?php 
 	define("SERVER", "localhost");
-	define("PASS", "");
+	define("PASS", "rootroot");
 	define("USER", "root");
-	define("DB", "web");
+	define("DB", "Distribuidora");
 
 
  ?>
